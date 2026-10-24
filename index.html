@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>I Love You 💗</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.box {
+    width: 120px;
+    height: 120px;
+    background: #ffb6c9;
+    border: 3px solid #ff6b98;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px #ffc5d5;
+    transition: transform 0.4s;
+    z-index: 2;
+}
+
+.box:hover {
+    transform: scale(1.08);
+}
+
+.hint {
+    margin-top: 20px;
+    color: #ff6b98;
+    font-size: 16px;
+}
+
+.message {
+    position: absolute;
+    font-size: 23px;
+    font-weight: bold;
+    color: #ff4f87;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: burst 2.5s ease-out forwards;
+    z-index: 3;
+}
+
+@keyframes burst {
+    0% {
+        transform: translate(0, 0) scale(0.2) rotate(0deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--x), var(--y))
+                   scale(1.3) rotate(var(--r));
+        opacity: 0;
+    }
+}
+
+.rain {
+    position: absolute;
+    top: -50px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #ff4f87;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: fall var(--duration) linear forwards;
+    z-index: 1;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-30px) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.box.open {
+    animation: pop 0.5s ease forwards;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5) rotate(10deg); }
+    100% { transform: scale(0) rotate(180deg); opacity: 0; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="box" id="box" onclick="startLove()">
+        🎁
+    </div>
+
+    <p class="hint" id="hint">Tap the little box 💗</p>
+</div>
+
+<script>
+let started = false;
+let rainInterval;
+
+function startLove() {
+    if (started) return;
+    started = true;
+
+    const box = document.getElementById("box");
+    document.getElementById("hint").style.display = "none";
+
+    box.classList.add("open");
+
+    // Burst of I LOVE YOU messages
+    for (let i = 0; i < 45; i++) {
+        setTimeout(() => {
+            const msg = document.createElement("div");
+            msg.className = "message";
+            msg.innerHTML = "I LOVE YOU 💗";
+
+            msg.style.left = "50%";
+            msg.style.top = "50%";
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 350;
+
+            msg.style.setProperty("--x",
+                Math.cos(angle) * distance + "px");
+
+            msg.style.setProperty("--y",
+                Math.sin(angle) * distance + "px");
+
+            msg.style.setProperty("--r",
+                (Math.random() * 60 - 30) + "deg");
+
+            document.body.appendChild(msg);
+
+            setTimeout(() => msg.remove(), 2600);
+        }, i * 35);
+    }
+
+    // Continuous I LOVE YOU shower
+    rainInterval = setInterval(() => {
+        for (let i = 0; i < 5; i++) {
+            const rain = document.createElement("div");
+            rain.className = "rain";
+            rain.innerHTML = "I LOVE YOU 💗";
+
+            rain.style.left = Math.random() * 90 + "%";
+            rain.style.setProperty("--duration",
+                (2.5 + Math.random() * 3) + "s");
+
+            rain.style.animationDelay =
+                Math.random() * 0.5 + "s";
+
+            document.body.appendChild(rain);
+
+            setTimeout(() => rain.remove(), 6000);
+        }
+    }, 250);
+}
+</script>
+
+</body>
+</html>
